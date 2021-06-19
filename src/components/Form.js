@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab'
 import moment from 'moment'
 
 export default class Form extends Component {
@@ -13,7 +14,8 @@ export default class Form extends Component {
         fat: '',
         muscle: '',
       },
-      allData: JSON.parse(localStorage.getItem('data')) || []
+      allData: JSON.parse(localStorage.getItem('data')) || [],
+      toastOpen: false
     }
   }
   
@@ -54,6 +56,14 @@ export default class Form extends Component {
   }
 
   submitData = (event) => {
+    event.preventDefault()
+    const { data, weight, fat, muscle } = this.state.inputData
+    if (data === '' || weight === '' || fat === '' || muscle === '') {
+      this.setState({
+        toastOpen: true
+      })
+      return
+    }
     this.setState({
       allData: [
         ...this.state.allData,
@@ -67,7 +77,6 @@ export default class Form extends Component {
         muscle: ''
       }
     }, () => { this.saveLocalStorage(this.state.allData) })
-    event.preventDefault()
   }
 
   saveLocalStorage = (data) => {
@@ -77,31 +86,46 @@ export default class Form extends Component {
     localStorage.setItem('data', JSON.stringify(data))
   }
 
+  handleClose = () => {
+    this.setState({
+      toastOpen: false
+    })
+  }
+
   render() {
     return (
-      <form onSubmit={this.submitData} >
-        <TextField
-          id="date"
-          label="測量時間"
-          type="date"
-          value={this.state.inputData.date}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          className="date-picker"
-          onChange={this.handleDateChange}
-        />
-        <div className="input_wrapper">
-          <TextField id="outlined-basic" label="體重" variant="outlined" className="data-input" value={this.state.inputData.weight} onChange={this.handleWeightChange}/><span className="unit">kg</span>
-        </div>
-        <div className="input_wrapper">
-          <TextField id="outlined-basic" label="體脂肪" variant="outlined" className="data-input" value={this.state.inputData.fat} onChange={this.handleFatChange}/><span className="unit">%</span>
-        </div>
-        <div className="input_wrapper">
-          <TextField id="outlined-basic" label="骨骼肌" variant="outlined" className="data-input" value={this.state.inputData.muscle} onChange={this.handleMuscleChange}/><span className="unit">kg</span>
-        </div>
-        <Button variant="contained" color="secondary" type="submit" >送出紀錄</Button>
-      </form>
+      <React.Fragment>
+        <Snackbar open={this.state.toastOpen} onClose={this.handleClose} autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'center'}}>
+          <Alert severity="warning">
+              還有<strong>尚未填寫</strong>的欄位喔！
+          </Alert>
+        </Snackbar>
+
+        <form onSubmit={this.submitData} >
+          <TextField
+            id="date"
+            label="測量時間"
+            type="date"
+            value={this.state.inputData.date}
+            inputProps={{ min: '', max: moment().format('YYYY-MM-DD') }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            className="date-picker"
+            onChange={this.handleDateChange}
+          />
+          <div className="input_wrapper">
+            <TextField id="outlined-basic" label="體重" variant="outlined" className="data-input" value={this.state.inputData.weight} onChange={this.handleWeightChange}/><span className="unit">kg</span>
+          </div>
+          <div className="input_wrapper">
+            <TextField id="outlined-basic" label="體脂肪" variant="outlined" className="data-input" value={this.state.inputData.fat} onChange={this.handleFatChange}/><span className="unit">%</span>
+          </div>
+          <div className="input_wrapper">
+            <TextField id="outlined-basic" label="骨骼肌" variant="outlined" className="data-input" value={this.state.inputData.muscle} onChange={this.handleMuscleChange}/><span className="unit">kg</span>
+          </div>
+          <Button variant="contained" color="secondary" type="submit" >送出紀錄</Button>
+        </form>
+      </React.Fragment>
     )
   }
 }
