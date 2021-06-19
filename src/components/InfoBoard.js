@@ -10,9 +10,9 @@ function InfoBoard() {
   const [selectedTab, setSelectedTab] = useState(0)
   
   const changeSelect = (event, prevSelect) => {
-    console.log(prevSelect)
     setSelectedTab(prevSelect)
   }
+  
   return (
     <div className="info-board">
       
@@ -21,7 +21,9 @@ function InfoBoard() {
             tabsList.map((tab, index) => <Tab label={ tab } key={ index }/>)
           }
         </Tabs>
-      <InfoBoardContent />
+      <div className="info-board-content__wrapper">
+        <InfoBoardContent selectedTab={selectedTab}/>
+      </div>
     </div>
   )
 }

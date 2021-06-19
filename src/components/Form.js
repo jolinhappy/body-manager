@@ -12,7 +12,7 @@ export default class Form extends Component {
         weight: '',
         fat: '',
       },
-      allData: []
+      allData: JSON.parse(localStorage.getItem('data')) || []
     }
   }
   
@@ -60,6 +60,9 @@ export default class Form extends Component {
   }
 
   saveLocalStorage = (data) => {
+    data = data.sort((a, b) => {
+      return moment(a.date) - moment(b.date)
+    })
     localStorage.setItem('data', JSON.stringify(data))
   }
 
