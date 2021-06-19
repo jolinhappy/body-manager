@@ -12,7 +12,7 @@ export default class Form extends Component {
         weight: '',
         fat: '',
       },
-      allDate: []
+      allData: []
     }
   }
   
@@ -43,11 +43,11 @@ export default class Form extends Component {
     }))
   }
 
-  submitData = event => {
-    this.setState(prevState => ({
-      allDate: [
-        ...prevState.allDate,
-        prevState.inputData
+  submitData = (event) => {
+    this.setState({
+      allData: [
+        ...this.state.allData,
+        this.state.inputData
       ],
       inputData: {
         ...this.state.inputData,
@@ -55,9 +55,14 @@ export default class Form extends Component {
         weight: '',
         fat: '',
       }
-    }))
+    }, () => { this.saveLocalStorage(this.state.allData) })
     event.preventDefault()
   }
+
+  saveLocalStorage = (data) => {
+    localStorage.setItem('data', JSON.stringify(data))
+  }
+
   render() {
     return (
       <form onSubmit={this.submitData} >
@@ -65,7 +70,7 @@ export default class Form extends Component {
           id="date"
           label="測量時間"
           type="date"
-          defaultValue={this.state.inputData.date}
+          value={this.state.inputData.date}
           InputLabelProps={{
             shrink: true,
           }}
