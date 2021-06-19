@@ -12,11 +12,11 @@ function InfoBoard() {
   const changeSelect = (event, prevSelect) => {
     setSelectedTab(prevSelect)
   }
-  
+
   return (
     <div className="info-board">
       
-        <Tabs value={selectedTab} onChange={changeSelect} indicatorColor="primary" textColor="primary" centered>
+        <Tabs value={selectedTab} onChange={changeSelect} indicatorColor="secondary" textColor="secondary" centered>
           {
             tabsList.map((tab, index) => <Tab label={ tab } key={ index }/>)
           }

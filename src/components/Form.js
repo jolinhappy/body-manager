@@ -11,6 +11,7 @@ export default class Form extends Component {
         date: moment().format('YYYY-MM-DD'),
         weight: '',
         fat: '',
+        muscle: '',
       },
       allData: JSON.parse(localStorage.getItem('data')) || []
     }
@@ -43,6 +44,15 @@ export default class Form extends Component {
     }))
   }
 
+  handleMuscleChange = event => {
+    this.setState(prevState => ({
+      inputData: {
+        ...prevState.inputData,
+        muscle: event.target.value
+      }
+    }))
+  }
+
   submitData = (event) => {
     this.setState({
       allData: [
@@ -54,6 +64,7 @@ export default class Form extends Component {
         date: '',
         weight: '',
         fat: '',
+        muscle: ''
       }
     }, () => { this.saveLocalStorage(this.state.allData) })
     event.preventDefault()
@@ -81,12 +92,15 @@ export default class Form extends Component {
           onChange={this.handleDateChange}
         />
         <div className="input_wrapper">
-          <TextField id="outlined-basic" label="體重" variant="outlined" className="data-input" value={this.state.inputData.weight} onChange={this.handleWeightChange}/><span className="unit">KG</span>
+          <TextField id="outlined-basic" label="體重" variant="outlined" className="data-input" value={this.state.inputData.weight} onChange={this.handleWeightChange}/><span className="unit">kg</span>
         </div>
         <div className="input_wrapper">
-          <TextField id="outlined-basic" label="體脂" variant="outlined" className="data-input" value={this.state.inputData.fat} onChange={this.handleFatChange}/><span className="unit">%</span>
+          <TextField id="outlined-basic" label="體脂肪" variant="outlined" className="data-input" value={this.state.inputData.fat} onChange={this.handleFatChange}/><span className="unit">%</span>
         </div>
-        <Button variant="contained" color="primary" type="submit" >送出紀錄</Button>
+        <div className="input_wrapper">
+          <TextField id="outlined-basic" label="骨骼肌" variant="outlined" className="data-input" value={this.state.inputData.muscle} onChange={this.handleMuscleChange}/><span className="unit">kg</span>
+        </div>
+        <Button variant="contained" color="secondary" type="submit" >送出紀錄</Button>
       </form>
     )
   }

@@ -17,6 +17,7 @@ function InfoBoardContent({ selectedTab }) {
     let labels = []
     let weightData = []
     let fatData = []
+    let muscleData = []
    
     if (res) {
       labels = res.map(data => (
@@ -27,6 +28,9 @@ function InfoBoardContent({ selectedTab }) {
       ))
       fatData = res.map(data => (
         data.fat
+      ))
+      muscleData = res.map(data => (
+        data.muscle
       ))
     }
     setLocalStorageData({
@@ -42,11 +46,19 @@ function InfoBoardContent({ selectedTab }) {
           yAxisID: 'y-axis-1',
         },
         {
-          label: '體脂(%)',
+          label: '體脂肪(%)',
           data: fatData,
           fill: false,
           backgroundColor: 'rgb(54, 162, 235)',
           borderColor: 'rgba(54, 162, 235, 0.2)',
+          yAxisID: 'y-axis-2',
+        },
+        {
+          label: '骨骼肌(kg)',
+          data: muscleData,
+          fill: false,
+          backgroundColor: 'rgb(2, 223, 130)',
+          borderColor: 'rgba(2, 223, 130, 0.2)',
           yAxisID: 'y-axis-2',
         }
       ]
@@ -56,7 +68,7 @@ function InfoBoardContent({ selectedTab }) {
   if (selectedTab === 0) {
     return (
     <React.Fragment>
-      <div className="content-title">記錄數據</div>
+      <div className="content-title">新增紀錄</div>
       <div className="content-description">請填寫你的體重及體脂。</div>
       <Form/>
     </React.Fragment>
@@ -64,7 +76,7 @@ function InfoBoardContent({ selectedTab }) {
   } else if (selectedTab === 1) {
     return (
       <React.Fragment>
-        <h1>圖表</h1>
+        <div className="content-title">紀錄圖表</div>
         <Chart data={ localStorageData }/>
       </React.Fragment>
     )
